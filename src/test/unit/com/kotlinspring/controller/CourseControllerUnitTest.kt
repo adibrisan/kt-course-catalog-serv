@@ -50,9 +50,50 @@ class CourseControllerUnitTest {
     }
 
     @Test
+    fun addCourse_validation() {
+
+        val courseDTO = CourseDTO(null, ""
+            ,"")
+
+        every { courseServiceMockk.addCourse(any()) } returns courseDTO(id = 1)
+
+        val response = webTestClient
+            .post()
+            .uri("/v1/courses")
+            .bodyValue(courseDTO)
+            .exchange()
+            .expectStatus().isBadRequest
+            .expectBody(String::class.java)
+            .returnResult()
+            .responseBody
+        Assertions.assertEquals("courseDTO.category must not be blank, courseDTO.name must not be blank",response)
+    }
+
+    @Test
+    fun addCourse_runtimeException() {
+
+        val courseDTO = CourseDTO(null, "Build Restful APIs using SpringBoot and Kotlin"
+            ,"Dilip Sundarraj")
+
+        val errorMessage = "Unexpected error occured"
+        every { courseServiceMockk.addCourse(any()) } throws RuntimeException(errorMessage)
+
+        val response = webTestClient
+            .post()
+            .uri("/v1/courses")
+            .bodyValue(courseDTO)
+            .exchange()
+            .expectStatus().is5xxServerError
+            .expectBody(String::class.java)
+            .returnResult()
+            .responseBody
+        Assertions.assertEquals(errorMessage,response)
+    }
+
+    @Test
     fun retrieveAllCourses(){
 
-        every { courseServiceMockk.retrieveAllCourses() }.returnsMany(
+        every { courseServiceMockk.retrieveAllCourses(any()) }.returnsMany(
             listOf(courseDTO(id = 1),
                 courseDTO(id = 2,
                     name = "Build Reactive Microservices using Spring WebFlux/SpringBoot"))
