@@ -20,12 +20,12 @@ fun courseDTO(
     id: Int? = null,
     name: String = "Build RestFul APis using Spring Boot and Kotlin",
     category: String = "Dilip Sundarraj",
-    instructorId: Int? = 1
+    //instructorId: Int? = 1
 ) = CourseDTO(
     id,
     name,
     category,
-    instructorId
+    //instructorId
 )
 
 fun courseEntityList(instructor: Instructor? = null) = listOf(
@@ -43,7 +43,3 @@ fun courseEntityList(instructor: Instructor? = null) = listOf(
 
 fun instructorEntity(name : String = "Dilip Sundarraj")
         = Instructor(null, name)
-
-
-
-

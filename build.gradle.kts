@@ -1,5 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
+
+extra["testcontainersVersion"] = "1.16.2"
+
+
 plugins {
 	id("org.springframework.boot") version "2.6.3"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
@@ -38,6 +42,17 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-webflux")
 	testImplementation("io.mockk:mockk:1.10.4")
 	testImplementation("com.ninja-squad:springmockk:3.0.1")
+
+
+	dependencyManagement {
+		imports {
+			mavenBom("org.testcontainers:testcontainers-bom:${property("testcontainersVersion")}")
+		}
+	}
+
+		//test-containers
+		testImplementation("org.testcontainers:junit-jupiter")
+		testImplementation("org.testcontainers:postgresql")
 }
 
 tasks.withType<KotlinCompile> {
