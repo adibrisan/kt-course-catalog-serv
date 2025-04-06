@@ -1,5 +1,6 @@
 package com.kotlinspring.exceptionhandler
 
+import com.kotlinspring.exception.InstructorNotValidException
 import mu.KLogging
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
@@ -31,6 +32,13 @@ class GlobalErrorHandler : ResponseEntityExceptionHandler() {
         logger.info("errors : $errors")
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(errors.joinToString(", ") { it })
+    }
+
+    @ExceptionHandler(InstructorNotValidException::class)
+    fun handleInstructorNotValidExceptions(ex: InstructorNotValidException, request: WebRequest) : ResponseEntity<Any>{
+        logger.error("Runtime exception observed : ${ex.message}", ex)
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(ex.message)
     }
 
     @ExceptionHandler(Exception::class)
